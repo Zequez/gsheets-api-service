@@ -32,5 +32,5 @@ app.use(function (err, req, res, next) {
 });
 
 app.listen(port, function () {
-  console.log("GSX2JSON listening on port " + port);
+  console.log("GSheets API Service listening on port " + port);
 });

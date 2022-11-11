@@ -1,5 +1,6 @@
 var gauthkey = process.env.GOOGLE_API_KEY; // https://developers.google.com/sheets/api/guides/authorizing#APIKey
 var request = require("request");
+var authorizedSheets = process.env.AUTHORIZED_SHEETS.split(",");
 
 module.exports = function (req, res, next) {
   try {
@@ -28,6 +29,13 @@ module.exports = function (req, res, next) {
         return res
           .status(response.statusCode)
           .json("You must provide a sheet name");
+      }
+      if (authorizedSheets.indexOf(id) === -1) {
+        return res
+          .status(response.statusCode)
+          .json(
+            "Sheet ID is not authorized, request maintainer for it to be added"
+          );
       }
       if (!error && response.statusCode === 200) {
         var data = JSON.parse(response.body);

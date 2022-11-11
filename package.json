@@ -2,7 +2,7 @@
   "name": "gsx2json",
   "version": "1.0.0",
   "description": "Google Spreadsheet to JSON API app",
-  "main": "app.js",
+  "main": "api/index.js",
   "author": "Nick Moreton",
   "dependencies": {
     "body-parser": "^1.x.x",
@@ -12,6 +12,6 @@
   },
   "license": "ISC",
   "scripts": {
-    "start": "node app.js"
+    "start": "node api/index.js"
   }
 }

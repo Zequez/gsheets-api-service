@@ -1,16 +1,36 @@
-const app = require("express")();
-const { v4 } = require("uuid");
+require("dotenv").config();
+var api = require("./api");
 
-app.get("/api", (req, res) => {
-  const path = `/api/item/${v4()}`;
-  res.setHeader("Content-Type", "text/html");
-  res.setHeader("Cache-Control", "s-max-age=1, stale-while-revalidate");
-  res.end(`Hello! Go to item: <a href="${path}">${path}</a>`);
+var express = require("express");
+var path = require("path");
+var bodyParser = require("body-parser");
+
+var app = express();
+
+var port = process.env.PORT || 5000;
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
 });
 
-app.get("/api/item/:slug", (req, res) => {
-  const { slug } = req.params;
-  res.end(`Item: ${slug}`);
+// body parser middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// get api
+app.get("/api", api);
+
+// error handler
+app.use(function (err, req, res, next) {
+  console.error(err.stack);
+  res.status(400).send(err.message);
 });
 
-module.exports = app;
+app.listen(port, function () {
+  console.log("GSheets API Service listening on port " + port);
+});

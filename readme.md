@@ -1,22 +1,13 @@
-# GSX2JSON - Google Spreadsheet to JSON API service.
+# Google Sheets to JSON API for my teams
 
-## About
+# About
 
-One useful feature of Google Spreadsheets is the ability to access the data as JSON by using a particular feed URL. However, this is a bit fiddly to do, and the resulting JSON is pretty unreadable, with usable data buried deep inside objects.
-
-This API connects to your spreadsheet and santizes the data, providing simple, readable JSON for you to use in your app.
-
-## Install
-
-- Get [Google API key](https://developers.google.com/sheets/api/guides/authorizing#APIKey) and add to api.js (line 1).
-- You must also enable the Google Sheets API and set up a service account.
-- Make sure your Google Sheet is set to be shared to 'anyone with the link'.
-- Run `npm install`.
-- Run `node app`.
+This is basically a thin layer over Google Sheets API that allows me and my teams
+to more easily use Google Sheets as an API service to render pages from spreadsheet data.
 
 ## Usage
 
-First, you must make sure your Google Sheet is set to be shared to 'anyone with the link'. 
+First, you must make sure your Google Sheet is set to be shared to 'anyone with the link'.
 
 You can then access your readable JSON API using the `/api` endpoint. You can change this in app.js.
 
@@ -32,7 +23,7 @@ This will update live with changes to the spreadsheet.
 
 **id (required):** The ID of your document. This is the big long aplha-numeric code in the middle of your document URL.
 
-**sheet (required):** The name of the individual sheet you want to get data from. 
+**sheet (required):** The name of the individual sheet you want to get data from.
 
 **q (optional):** A simple query string. This is case insensitive and will add any row containing the string in any cell to the filtered result.
 

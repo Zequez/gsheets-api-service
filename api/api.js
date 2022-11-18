@@ -1,42 +1,41 @@
-var gauthkey = process.env.GOOGLE_API_KEY; // https://developers.google.com/sheets/api/guides/authorizing#APIKey
-var request = require("request");
-var authorizedSheets = process.env.AUTHORIZED_SHEETS.split(",");
+const GAUTH_KEY = process.env.GOOGLE_API_KEY; // https://developers.google.com/sheets/api/guides/authorizing#APIKey
+const request = require("request");
+const sheets = Object.fromEntries(
+  process.env.SHEETS_ALIASES.split(",").map((v) => v.split("|"))
+);
+const authorizedSheets = Object.values(sheets);
 
 module.exports = function (req, res, next) {
   try {
-    var params = req.query,
-      api_key = params.api_key || gauthkey,
-      id = params.id,
+    const params = req.query,
+      api_key = params.api_key || GAUTH_KEY,
+      alias = params.id,
       sheet = params.sheet,
       query = params.q,
       useIntegers = params.integers || true,
       showRows = params.rows || true,
-      showColumns = params.columns || true,
-      url =
-        "https://sheets.googleapis.com/v4/spreadsheets/" +
-        id +
-        "/values/" +
-        sheet +
-        "?key=" +
-        api_key;
+      showColumns = params.columns || true;
+
+    const idFromAlias = sheets[params.alias];
+    const id = params.id || idFromAlias;
+
+    if (params.alias && !idFromAlias) {
+      return res
+        .status(404)
+        .json("Sheet alias not found; you can request maintainer to add it");
+    }
+
+    if (!id) {
+      return res.status(400).json("Sheet ID not provided");
+    }
+
+    if (!sheet) {
+      return res.status(400).json("You must provide a sheet name");
+    }
+
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}?key=${api_key}`;
+
     request(url, function (error, response, body) {
-      if (!id) {
-        return res
-          .status(response.statusCode)
-          .json("You must provide a sheet ID");
-      }
-      if (!sheet) {
-        return res
-          .status(response.statusCode)
-          .json("You must provide a sheet name");
-      }
-      if (authorizedSheets.indexOf(id) === -1) {
-        return res
-          .status(response.statusCode)
-          .json(
-            "Sheet ID is not authorized, request maintainer for it to be added"
-          );
-      }
       if (!error && response.statusCode === 200) {
         var data = JSON.parse(response.body);
         var responseObj = {};

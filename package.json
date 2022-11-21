@@ -1,17 +1,21 @@
 {
-  "name": "gsx2json",
+  "name": "gsheets-api-service",
   "version": "1.0.0",
   "description": "Google Spreadsheet to JSON API app",
   "main": "api/index.js",
-  "author": "Nick Moreton",
+  "author": "Ezequiel Schwartzman",
+  "license": "UNLICENSE",
+  "scripts": {
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js"
+  },
   "dependencies": {
     "body-parser": "^1.x.x",
     "dotenv": "^16.0.3",
     "express": "^4.x.x",
     "request": "^2.69.0"
   },
-  "license": "ISC",
-  "scripts": {
-    "start": "node api/index.js"
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
